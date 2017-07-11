@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="GroovesDBService"
+    targetNamespace="http://www.groovesdb.com.au/GroovesDBService"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+    xmlns:soapjms="http://www.w3.org/2010/soapjms/"
+    xmlns:tns="http://www.groovesdb.com.au/GroovesDBService"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+    <wsdl:types>
+        <xsd:schema targetNamespace="http://www.groovesdb.com.au/GroovesDBService"
+            xmlns:tns="http://www.groovesdb.com.au/GroovesDBService"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element name="list" type="tns:list"/>
+            <xsd:element name="listResponse" type="tns:listResponse"/>
+            <xsd:element name="search" type="tns:search"/>
+            <xsd:element name="searchResponse" type="tns:searchResponse"/>
+            <xsd:element name="update" type="tns:update"/>
+            <xsd:element name="updateResponse" type="tns:updateResponse"/>
+            <xsd:complexType name="list">
+                <xsd:sequence>
+                    <xsd:element name="request" nillable="true" type="tns:request"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="request">
+                <xsd:sequence>
+                    <xsd:element name="filter" nillable="true" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="listResponse">
+                <xsd:sequence>
+                    <xsd:element name="response" nillable="true" type="tns:response"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="response">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" name="artist" nillable="true"
+                        type="tns:artist"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="artist">
+                <xsd:sequence>
+                    <xsd:element name="id" nillable="true" type="xsd:string"/>
+                    <xsd:element name="name" nillable="true" type="xsd:string"/>
+                    <xsd:element name="alias" nillable="true" type="xsd:string"/>
+                    <xsd:element name="profile" nillable="true" type="xsd:string"/>
+                    <xsd:element name="sites" nillable="true" type="xsd:string"/>
+                    <xsd:element maxOccurs="unbounded" name="release" nillable="true"
+                        type="tns:release"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="release">
+                <xsd:sequence>
+                    <xsd:element name="id" nillable="true" type="xsd:string"/>
+                    <xsd:element name="title" nillable="true" type="xsd:string"/>
+                    <xsd:element name="genre" nillable="true" type="xsd:string"/>
+                    <xsd:element name="style" nillable="true" type="xsd:string"/>
+                    <xsd:element name="year" nillable="true" type="xsd:string"/>
+                    <xsd:element name="notes" nillable="true" type="xsd:string"/>
+                    <xsd:element maxOccurs="unbounded" name="sale" nillable="true" type="tns:sale"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="sale">
+                <xsd:sequence>
+                    <xsd:element name="price" nillable="true" type="xsd:string"/>
+                    <xsd:element name="title" nillable="true" type="xsd:string"/>
+                    <xsd:element name="shipping_cost" nillable="true" type="xsd:string"/>
+                    <xsd:element name="shipping_location" nillable="true" type="xsd:string"/>
+                    <xsd:element name="details" nillable="true" type="xsd:string"/>
+                    <xsd:element name="media_condition" nillable="true" type="xsd:string"/>
+                    <xsd:element name="sleeve_condition" nillable="true" type="xsd:string"/>
+                    <xsd:element name="seller" nillable="true" type="xsd:string"/>
+                    <xsd:element name="source" nillable="true" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="search">
+                <xsd:sequence>
+                    <xsd:element name="request" nillable="true" type="tns:request2"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="request2">
+                <xsd:sequence>
+                    <xsd:element name="artist" nillable="true" type="xsd:string"/>
+                    <xsd:element name="release" nillable="true" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="searchResponse">
+                <xsd:sequence>
+                    <xsd:element name="response" nillable="true" type="tns:response2"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="response2">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" name="artist" nillable="true"
+                        type="tns:artist3"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="artist3">
+                <xsd:sequence>
+                    <xsd:element name="id" nillable="true" type="xsd:string"/>
+                    <xsd:element name="name" nillable="true" type="xsd:string"/>
+                    <xsd:element name="alias" nillable="true" type="xsd:string"/>
+                    <xsd:element name="profile" nillable="true" type="xsd:string"/>
+                    <xsd:element name="sites" nillable="true" type="xsd:string"/>
+                    <xsd:element maxOccurs="unbounded" name="release" nillable="true"
+                        type="tns:release3"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="release3">
+                <xsd:sequence>
+                    <xsd:element name="id" nillable="true" type="xsd:string"/>
+                    <xsd:element name="title" nillable="true" type="xsd:string"/>
+                    <xsd:element name="genre" nillable="true" type="xsd:string"/>
+                    <xsd:element name="style" nillable="true" type="xsd:string"/>
+                    <xsd:element name="year" nillable="true" type="xsd:string"/>
+                    <xsd:element name="notes" nillable="true" type="xsd:string"/>
+                    <xsd:element maxOccurs="unbounded" name="sale" nillable="true" type="tns:sale2"
+                    />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="sale2">
+                <xsd:sequence>
+                    <xsd:element name="price" nillable="true" type="xsd:string"/>
+                    <xsd:element name="title" nillable="true" type="xsd:string"/>
+                    <xsd:element name="shipping_cost" nillable="true" type="xsd:string"/>
+                    <xsd:element name="shipping_location" nillable="true" type="xsd:string"/>
+                    <xsd:element name="details" nillable="true" type="xsd:string"/>
+                    <xsd:element name="media_condition" nillable="true" type="xsd:string"/>
+                    <xsd:element name="sleeve_condition" nillable="true" type="xsd:string"/>
+                    <xsd:element name="seller" nillable="true" type="xsd:string"/>
+                    <xsd:element name="source" nillable="true" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="update">
+                <xsd:sequence>
+                    <xsd:element name="request" nillable="true" type="tns:request3"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="request3">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" name="artist" nillable="true"
+                        type="tns:artist4"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="artist4">
+                <xsd:sequence>
+                    <xsd:element name="id" nillable="true" type="xsd:string"/>
+                    <xsd:element name="name" nillable="true" type="xsd:string"/>
+                    <xsd:element name="alias" nillable="true" type="xsd:string"/>
+                    <xsd:element name="profile" nillable="true" type="xsd:string"/>
+                    <xsd:element name="sites" nillable="true" type="xsd:string"/>
+                    <xsd:element maxOccurs="unbounded" name="release" nillable="true"
+                        type="tns:release4"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="release4">
+                <xsd:sequence>
+                    <xsd:element name="id" nillable="true" type="xsd:string"/>
+                    <xsd:element name="title" nillable="true" type="xsd:string"/>
+                    <xsd:element name="genre" nillable="true" type="xsd:string"/>
+                    <xsd:element name="style" nillable="true" type="xsd:string"/>
+                    <xsd:element name="year" nillable="true" type="xsd:string"/>
+                    <xsd:element name="notes" nillable="true" type="xsd:string"/>
+                    <xsd:element maxOccurs="unbounded" name="sale" nillable="true" type="tns:sale3"
+                    />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="sale3">
+                <xsd:sequence>
+                    <xsd:element name="price" nillable="true" type="xsd:string"/>
+                    <xsd:element name="title" nillable="true" type="xsd:string"/>
+                    <xsd:element name="shipping_cost" nillable="true" type="xsd:string"/>
+                    <xsd:element name="shipping_location" nillable="true" type="xsd:string"/>
+                    <xsd:element name="details" nillable="true" type="xsd:string"/>
+                    <xsd:element name="media_condition" nillable="true" type="xsd:string"/>
+                    <xsd:element name="sleeve_condition" nillable="true" type="xsd:string"/>
+                    <xsd:element name="seller" nillable="true" type="xsd:string"/>
+                    <xsd:element name="source" nillable="true" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="updateResponse">
+                <xsd:sequence>
+                    <xsd:element name="response" nillable="true" type="tns:response3"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="response3">
+                <xsd:sequence>
+                    <xsd:element name="status" nillable="true" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="GroovesDBService_PortType_update">
+        <wsdl:part name="parameters" element="tns:update"> </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="GroovesDBService_PortType_search">
+        <wsdl:part name="parameters" element="tns:search"> </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="GroovesDBService_PortType_searchResponse">
+        <wsdl:part name="parameters" element="tns:searchResponse"> </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="GroovesDBService_PortType_listResponse">
+        <wsdl:part name="parameters" element="tns:listResponse"> </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="GroovesDBService_PortType_list">
+        <wsdl:part name="parameters" element="tns:list"> </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="GroovesDBService_PortType_updateResponse">
+        <wsdl:part name="parameters" element="tns:updateResponse"> </wsdl:part>
+    </wsdl:message>
+    <wsdl:portType name="GroovesDBService_PortType">
+        <wsdl:operation name="list">
+            <wsdl:input message="tns:GroovesDBService_PortType_list"> </wsdl:input>
+            <wsdl:output message="tns:GroovesDBService_PortType_listResponse"> </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="search">
+            <wsdl:input message="tns:GroovesDBService_PortType_search"> </wsdl:input>
+            <wsdl:output message="tns:GroovesDBService_PortType_searchResponse"> </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="update">
+            <wsdl:input message="tns:GroovesDBService_PortType_update"> </wsdl:input>
+            <wsdl:output message="tns:GroovesDBService_PortType_updateResponse"> </wsdl:output>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="ws_GroovesDBService_Binder" type="tns:GroovesDBService_PortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="list">
+            <soap:operation soapAction="ws_GroovesDBService_Binder_list" style="document"/>
+            <wsdl:input>
+                <soap:body parts="parameters" use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body parts="parameters" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="search">
+            <soap:operation soapAction="ws_GroovesDBService_Binder_search" style="document"/>
+            <wsdl:input>
+                <soap:body parts="parameters" use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body parts="parameters" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="update">
+            <soap:operation soapAction="ws_GroovesDBService_Binder_update" style="document"/>
+            <wsdl:input>
+                <soap:body parts="parameters" use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body parts="parameters" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="ws.GroovesDBService">
+        <wsdl:port name="ws_GroovesDBService_Port" binding="tns:ws_GroovesDBService_Binder">
+            <soap:address
+                location="http://www.groovesdb.com.au/ws/ws.GroovesDBService/ws_GroovesDBService_Port"
+            />
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

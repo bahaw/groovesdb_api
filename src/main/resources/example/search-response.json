@@ -1,0 +1,49 @@
+{
+                  "Artist 1": [
+                    "name: DAvid Bowie",
+                    "alias: David Bowie",
+                    "profile: profile",
+                    "sites: sites",
+                      {
+                      "Release 1": [
+                        "title: Changes One",
+                        "year: 1970",
+                        {
+                          "Sales 1": [
+                            "source: discogs url",
+                            "cost: $25",
+                            "cat#: SD 7201",
+                            "country: UK",
+                            "media: VG+",
+                            "sleeves: VG+",
+                            "location: Italy",
+                            "details: "
+                            ],
+                          "Sales 2": [
+                            "source: discogs url",
+                            "cost: $25",
+                            "cat#: SD 7201",
+                            "country: UK",
+                            "media: VG+",
+                            "sleeves: VG+",
+                            "location: Italy",
+                            "details: fsjkajflda"
+                            ]
+                        }
+                      ],
+                      "Release 2": [
+                        "title: Hunky Dory",
+                        "year: 1973"
+                      ]
+                    }
+                  ],
+                  "Artist 2": [
+                    "name: David Bowie and Spiders from Mars",
+                    "alias: Pinups",
+                    "profile: profile",
+                    "sites: sites"
+                  ]
+                }
+
+
+

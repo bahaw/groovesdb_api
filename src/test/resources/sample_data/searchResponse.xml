@@ -1,0 +1,51 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+   <soap:Body>
+      <ns0:searchResponse xmlns:ns0="http://www.groovesdb.com.au/GroovesDBService">
+         <response>
+            <artist>
+               <id>1</id>
+               <name>David Bowie</name>
+               <alias>David Bowie</alias>
+               <profile>David Bowie profile</profile>
+               <sites>sites</sites>
+               <release>
+                  <title>Hunky Dory</title>
+                  <genre>Rock</genre>
+                  <style>Pop</style>
+                  <year>1973</year>
+                  <notes xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                  <sale>
+                     <price>$100</price>
+                     <title>Hunky Dory</title>
+                     <shipping_cost>$10</shipping_cost>
+                     <shipping_location>Australia</shipping_location>
+                     <details xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                     <media_condition>VG+</media_condition>
+                     <sleeve_condition>VG+</sleeve_condition>
+                     <seller>seller 1</seller>
+                     <source>discogs url</source>
+                  </sale>
+               </release>
+               <release>
+                  <title>Hunky Dory</title>
+                  <genre>Rock</genre>
+                  <style>Pop</style>
+                  <year>1973</year>
+                  <notes xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                  <sale>
+                     <price>$80</price>
+                     <title>Hunky Dory</title>
+                     <shipping_cost>$10</shipping_cost>
+                     <shipping_location>Australia</shipping_location>
+                     <details xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                     <media_condition>NM</media_condition>
+                     <sleeve_condition>NM</sleeve_condition>
+                     <seller>seller 2</seller>
+                     <source>discogs url</source>
+                  </sale>
+               </release>
+            </artist>
+         </response>
+      </ns0:searchResponse>
+   </soap:Body>
+</soap:Envelope>

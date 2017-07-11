@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:ws="http://www.mulesoft.org/schema/mule/ws" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+http://www.mulesoft.org/schema/mule/ws http://www.mulesoft.org/schema/mule/ws/current/mule-ws.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd">
+    <http:listener-config name="groovesdb-httpListenerConfig" host="0.0.0.0" port="${http.port}" doc:name="HTTP Listener Configuration"/>
+    <apikit:config name="groovesdb-config" raml="groovesdb.raml" consoleEnabled="true" doc:name="Router" keepRamlBaseUri="false">
+        <apikit:flow-mapping resource="/artists/{artistId}" action="get" flow-ref="get:/artists/{artistId}:groovesdb-config"/>
+    </apikit:config>
+    <ws:consumer-config name="GroovesDBServiceConsumer" service="ws.GroovesDBService" port="ws_GroovesDBService_Port" serviceAddress="${groovesdbservice.address}" wsdlLocation="GroovesDBService.wsdl" doc:name="Web Service Consumer"/>
+    <jms:activemq-connector name="GroovesDB_Active_MQ" brokerURL="${activemq.host}" validateConnections="true" doc:name="Active MQ"/>
+    <asynchronous-processing-strategy name="Asynchronous_Processing_Strategy" doc:name="Asynchronous Processing Strategy"/>
+    <flow name="groovesdb-main">
+        <http:listener config-ref="groovesdb-httpListenerConfig" path="/api/*" doc:name="HTTP"/>
+        <apikit:router config-ref="groovesdb-config" doc:name="APIkit Router"/>
+        <exception-strategy ref="groovesdb-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>
+    </flow>
+    <flow name="groovesdb-console">
+        <http:listener config-ref="groovesdb-httpListenerConfig" path="/console/*" doc:name="HTTP"/>
+        <apikit:console config-ref="groovesdb-config" doc:name="APIkit Console"/>
+    </flow>
+    <flow name="get:/artists/{artistId}:groovesdb-config">
+        <dw:transform-message doc:name="Transform Message" metadata:id="8d149ad3-64d1-4eab-966c-c513bced23ef">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace ns0 http://www.groovesdb.com.au/GroovesDBService
+---
+{
+	ns0#search: {
+		request: {
+			artist: flowVars.artistId
+		}
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <flow-ref name="groovesdb_q_subflow" doc:name="groovesdb_q_subflow"/>
+        <ws:consumer config-ref="GroovesDBServiceConsumer" operation="search" doc:name="Query GroovesDB Legacy Soap Service"/>
+        <dw:transform-message doc:name="Soap Xform to JSON" metadata:id="51d25595-df11-4521-865a-2ce60e72b9b0">
+            <dw:input-payload doc:sample="sample_data/searchResponse.xml" mimeType="application/xml"/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+%namespace ns0 http://www.groovesdb.com.au/GroovesDBService
+---
+payload.ns0#searchResponse.response]]></dw:set-payload>
+        </dw:transform-message>
+        <logger level="INFO" doc:name="Logger"/>
+    </flow>
+    <sub-flow name="groovesdb_q_subflow">
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <jms:outbound-endpoint topic="${jms.topic.out}" connector-ref="GroovesDB_Active_MQ" doc:name="Send to Active MQ"/>
+        <logger message="Done groovesdb q ...." level="INFO" doc:name="Logger"/>
+    </sub-flow>
+    <apikit:mapping-exception-strategy name="groovesdb-apiKitGlobalExceptionMapping">
+        <apikit:mapping statusCode="404">
+            <apikit:exception value="org.mule.module.apikit.exception.NotFoundException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Resource not found&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="405">
+            <apikit:exception value="org.mule.module.apikit.exception.MethodNotAllowedException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Method not allowed&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="415">
+            <apikit:exception value="org.mule.module.apikit.exception.UnsupportedMediaTypeException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Unsupported media type&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="406">
+            <apikit:exception value="org.mule.module.apikit.exception.NotAcceptableException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Not acceptable&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="400">
+            <apikit:exception value="org.mule.module.apikit.exception.BadRequestException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Bad request&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+    </apikit:mapping-exception-strategy>
+</mule>
